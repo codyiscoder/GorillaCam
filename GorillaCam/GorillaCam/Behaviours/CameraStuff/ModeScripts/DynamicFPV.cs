@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Cinemachine;
+using GorillaLocomotion;
+using UnityEngine;
 
 namespace GorillaCam.Behaviours.CameraStuff.ModeScripts
 {
@@ -43,11 +45,17 @@ namespace GorillaCam.Behaviours.CameraStuff.ModeScripts
                     _mainCam.Object.transform.position = GorillaTagger.Instance.headCollider.transform.position;
                     _mainCam.Object.transform.rotation = GorillaTagger.Instance.headCollider.transform.rotation;
 
-                    var thirdPersonCam = GameObject.Find("Player Objects/Third Person Camera/");
+                    var thirdPersonCam = GorillaTagger.Instance.thirdPersonCamera.GetComponentInChildren<Camera>();
                     if (thirdPersonCam != null)
                     {
                         thirdPersonCam.transform.position = _mainCam.Object.transform.position;
                         thirdPersonCam.transform.rotation = _mainCam.Object.transform.rotation;
+                        
+                        float speed = GTPlayer.Instance.RigidbodyVelocity.magnitude;
+                        float targetFOV = Mathf.Clamp(90 + speed * 6f, 80f, 130f);
+                        float currentFOV = 0;
+                        currentFOV = Mathf.Lerp(currentFOV, targetFOV, Time.deltaTime * 5f);
+                        thirdPersonCam.fieldOfView = currentFOV;
                     }
                 }
             }

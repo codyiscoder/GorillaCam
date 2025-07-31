@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cinemachine;
+using UnityEngine;
 using GorillaCam.Behaviours.CameraStuff.ModeScripts;
 using GorillaCam.Tools;
 
@@ -17,6 +18,12 @@ namespace GorillaCam.Behaviours
         public static cameraMode currentMode = cameraMode.DYNAMIC_FPV;
         private static cameraMode? lastLoadedMode = null;
         private static GameObject modeObject;
+        public CinemachineBrain cBrain;
+
+        public void Update()
+        {
+            if (cBrain == null) cBrain = GorillaTagger.Instance.thirdPersonCamera.GetComponentInChildren<CinemachineBrain>(); cBrain.enabled = false;
+        }
 
         public static int GetCameraMode(cameraMode mode)
         {
